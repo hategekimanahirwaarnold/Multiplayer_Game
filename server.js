@@ -7,20 +7,21 @@ const cors = require('cors');
 let { random, float, round } = Math;
 const fccTestingRoutes = require('./routes/fcctesting.js');
 const runner = require('./test-runner.js');
-
+const nocache = require('nocache')
 const app = express();
 // security meausures
-app.use((req, res, next) => {
-  res.setHeader('Server', 'PHP 7.4.3');
-  next();
-});
-// prevent browsers from MIME-sniffing the response
-app.use(helmet({
-  nocache: true,
-  noSniff: true
-}))
-app.use(helmet.hidePoweredBy());
-app.use(helmet.xssFilter());
+//cybersecurity
+app.use(
+  helmet({
+    noSniff: true,
+    xssFilter: true,
+    hidePoweredBy: {
+      setTo: "PHP 7.4.3",
+    }
+  })
+);
+
+app.use(nocache())
 
 // establish socet server
 const { createServer } = require('node:http');
